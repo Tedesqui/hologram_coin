@@ -8,6 +8,8 @@
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  
+  <script src="https://unpkg.com/aframe-youtube-component/dist/aframe-youtube-component.min.js"></script>
 
   <style>
     #initialMessage {
@@ -25,53 +27,6 @@
       max-width: 90%;
       font-family: sans-serif;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    #playPauseButton {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, 0.42); 
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px; 
-    }
-    #playPauseButton.is-playing {
-        padding: 10px 20px;
-    }
-    #playPauseButton.is-paused {
-        padding: 2px 6px; 
-    }
-
-    #playPauseButton .icon {
-        color: #28a745; 
-    }
-    #playPauseButton.is-playing .icon {
-        font-size: 24px;
-    }
-    #playPauseButton.is-paused .icon {
-        font-size: 44px;
-        position: relative;
-        bottom: 3px;
-        /* Deslocamento para a direita alterado para 5px */
-        left: 5px;   
-    }
-    #playPauseButton .text {
-        font-size: 16px; 
-        color: white; 
-    }
-
-    #playPauseButton.rotating {
-      transform: rotate(360deg);
-    }
-    #playPauseButton:hover {
-      background-color: rgba(0, 0, 0, 0.6); 
-      transform: scale(1.05);
     }
 
     #footerSocial {
@@ -112,21 +67,20 @@
 <body>
   
   <div id="initialMessage">
-    Aponte seu celular para frente para ver o vídeo, em seguida clique em Play.
+    Aponte seu celular para frente para ver o vídeo. Clique no vídeo para dar play.
   </div>
 
-  <button id="playPauseButton" class="is-paused">
-    <span class="icon">▶︎</span> <span class="text">Play</span>
-  </button>
-
   <a-scene vr-mode-ui="enabled: false">
-    <a-assets>
-      <video id="Video_Asset_0" src="videos/celia.mp4" playsinline webkit-playsinline loop></video>
-    </a-assets>
+    <a-entity id="video-holder" position="0 1.7 -15"
+      animation="property: position; to: 0 1.7 -15; dur: 1500; easing: easeOutElastic">
+      
+      <a-entity 
+        youtube="src: SpsoOVC56xc" 
+        width="3.2" 
+        height="1.8" 
+        look-at="[camera]">
+      </a-entity>
 
-    <a-entity id="video-holder" position="0 1.7 -10"
-      animation="property: position; to: 0 1.7 -4; dur: 1500; easing: easeOutElastic">
-      <a-video width="3" height="3" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
     </a-entity>
 
     <a-camera id="camera1"></a-camera>
@@ -145,9 +99,9 @@
   </div>
 
   <script>
-    const video = document.querySelector('#Video_Asset_0');
-    const playPauseButton = document.getElementById('playPauseButton');
-    
+    // ❌ SCRIPT DO BOTÃO FOI REMOVIDO
+
+    // Script para esconder a mensagem inicial após alguns segundos
     window.addEventListener('load', () => {
       const message = document.getElementById('initialMessage');
       if (message) {
@@ -155,23 +109,6 @@
           message.style.display = 'none';
         }, 6000); 
       }
-    });
-
-    playPauseButton.addEventListener('click', () => {
-      if (video.paused) {
-        video.muted = false; 
-        video.play();
-        playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
-        playPauseButton.classList.remove('is-paused');
-        playPauseButton.classList.add('is-playing');
-      } else {
-        video.pause();
-        playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
-        playPauseButton.classList.remove('is-playing');
-        playPauseButton.classList.add('is-paused');
-      }
-      playPauseButton.classList.add('rotating');
-      setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
   </script>
 </body>
