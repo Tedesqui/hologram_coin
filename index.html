@@ -10,6 +10,19 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
+    /* CORREÇÃO ADICIONADA AQUI: 
+      Esta regra força a cena 3D/AR para o fundo, garantindo que
+      os botões e textos em HTML fiquem visíveis na frente.
+    */
+    a-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
     #initialMessage {
       position: fixed;
       top: calc(50% + 100px); 
@@ -21,7 +34,7 @@
       border-radius: 10px;
       text-align: center;
       font-size: 18px;
-      z-index: 1001;
+      z-index: 1001; /* z-index alto para ficar na frente */
       max-width: 90%;
       font-family: sans-serif;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -31,7 +44,7 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      z-index: 999;
+      z-index: 999; /* z-index alto para ficar na frente */
       background-color: rgba(0, 0, 0, 0.42); 
       border: none;
       border-radius: 5px;
@@ -58,7 +71,6 @@
         font-size: 44px;
         position: relative;
         bottom: 3px;
-        /* Deslocamento para a direita alterado para 5px */
         left: 5px;   
     }
     #playPauseButton .text {
@@ -83,7 +95,7 @@
       display: flex;
       justify-content: center;
       gap: 40px;
-      z-index: 999;
+      z-index: 999; /* z-index alto para ficar na frente */
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47); 
     }
@@ -129,7 +141,7 @@
       <a-video width="3" height="3" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
     </a-entity>
 
-        <a-camera id="camera1" cursor="rayOrigin: mouse"></a-camera>
+    <a-camera id="camera1" cursor="rayOrigin: mouse"></a-camera>
   </a-scene>
 
   <div id="footerSocial">
@@ -174,7 +186,6 @@
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
 
-    // MODIFICADO: Adicionado script para lidar com o clique no vídeo 3D
     const videoEntity = document.querySelector('a-video');
     if (videoEntity) {
       videoEntity.addEventListener('click', function() {
