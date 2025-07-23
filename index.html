@@ -1,178 +1,201 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>𝐃𝐄𝐏𝐔𝐓𝐀𝐃𝐀 𝐂É𝐋𝐈𝐀 𝐉𝐎𝐑𝐃Ã𝐎</title>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>𝐃𝐄𝐏𝐔𝐓𝐀𝐃𝐀 𝐂É𝐋𝐈𝐀 𝐉𝐎𝐑𝐃Ã𝐎</title>
 
-  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
-  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+  <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
-  <style>
-    #initialMessage {
+  <style>
+    #initialMessage {
+      position: fixed;
+      top: calc(50% + 100px); 
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      border-radius: 10px;
+      text-align: center;
+      font-size: 18px;
+      z-index: 1001;
+      max-width: 90%;
+      font-family: sans-serif;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    #playPauseButton {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.42); 
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px; 
+    }
+    #playPauseButton.is-playing {
+        padding: 10px 20px;
+    }
+    #playPauseButton.is-paused {
+        padding: 2px 6px; 
+    }
+
+    #playPauseButton .icon {
+        color: #28a745; 
+    }
+    #playPauseButton.is-playing .icon {
+        font-size: 24px;
+    }
+    #playPauseButton.is-paused .icon {
+        font-size: 44px;
+        position: relative;
+        bottom: 3px;
+        left: 5px;   
+    }
+    #playPauseButton .text {
+        font-size: 16px; 
+        color: white; 
+    }
+
+    #playPauseButton.rotating {
+      transform: rotate(360deg);
+    }
+    #playPauseButton:hover {
+      background-color: rgba(0, 0, 0, 0.6); 
+      transform: scale(1.05);
+    }
+
+    /* MODIFICADO: Estilo do botão para posicioná-lo acima do rodapé */
+    #redirectButton {
       position: fixed;
-      top: calc(50% + 100px); 
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px;
-      background-color: rgba(0, 0, 0, 0.85);
-      color: white;
-      border-radius: 10px;
-      text-align: center;
-      font-size: 18px;
-      z-index: 1001;
-      max-width: 90%;
-      font-family: sans-serif;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    }
-
-    #playPauseButton {
-      position: fixed;
-      top: 20px;
-      left: 20px;
+      bottom: 95px; /* Posição vertical: 95px a partir do fundo */
+      left: 50%; /* Centraliza horizontalmente */
+      transform: translateX(-50%); /* Ajuste fino para centralização */
       z-index: 999;
-      background-color: rgba(0, 0, 0, 0.42); 
+      background-color: #007bff;
+      color: white;
       border: none;
       border-radius: 5px;
+      padding: 10px 15px;
+      font-family: sans-serif;
+      font-size: 16px;
       cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease, padding 0.3s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px; 
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
-    #playPauseButton.is-playing {
-        padding: 10px 20px;
-    }
-    #playPauseButton.is-paused {
-        padding: 2px 6px; 
-    }
-
-    #playPauseButton .icon {
-        color: #28a745; 
-    }
-    #playPauseButton.is-playing .icon {
-        font-size: 24px;
-    }
-    #playPauseButton.is-paused .icon {
-        font-size: 44px;
-        position: relative;
-        bottom: 3px;
-        /* Deslocamento para a direita alterado para 5px */
-        left: 5px;   
-    }
-    #playPauseButton .text {
-        font-size: 16px; 
-        color: white; 
-    }
-
-    #playPauseButton.rotating {
-      transform: rotate(360deg);
-    }
-    #playPauseButton:hover {
-      background-color: rgba(0, 0, 0, 0.6); 
+    #redirectButton:hover {
+      background-color: #0056b3;
       transform: scale(1.05);
     }
 
-    #footerSocial {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 20px 0;
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      z-index: 999;
-      background-color: rgba(0, 0, 0, 0.1);
-      box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47); 
-    }
-    #footerSocial a {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 34.56px;  
-      height: 34.56px;
-      text-decoration: none;
-    }
-    #footerSocial svg {
-      width: 34.56px;
-      height: 34.56px;
-      transition: transform 0.3s ease;
-    }
-    #footerSocial a:hover svg {
-      transform: scale(1.1);
-    }
-    #footerSocial .facebook svg { fill: #00008B; }
-    #footerSocial .instagram svg { fill: #833AB4; }
-    #footerSocial .whatsapp svg { fill: #25D366; }
-  </style>
+    #footerSocial {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      z-index: 999;
+      background-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47); 
+    }
+    #footerSocial a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34.56px;  
+      height: 34.56px;
+      text-decoration: none;
+    }
+    #footerSocial svg {
+      width: 34.56px;
+      height: 34.56px;
+      transition: transform 0.3s ease;
+    }
+    #footerSocial a:hover svg {
+      transform: scale(1.1);
+    }
+    #footerSocial .facebook svg { fill: #00008B; }
+    #footerSocial .instagram svg { fill: #833AB4; }
+    #footerSocial .whatsapp svg { fill: #25D366; }
+  </style>
 </head>
 
 <body>
-  
-  <div id="initialMessage">
-    Aponte seu celular para frente para ver o vídeo, em seguida clique em Play.
-  </div>
+  
+  <div id="initialMessage">
+    Aponte seu celular para frente para ver o vídeo, em seguida clique em Play.
+  </div>
 
-  <button id="playPauseButton" class="is-paused">
-    <span class="icon">▶︎</span> <span class="text">Play</span>
-  </button>
+  <button id="playPauseButton" class="is-paused">
+    <span class="icon">▶︎</span> <span class="text">Play</span>
+  </button>
 
-  <a-scene vr-mode-ui="enabled: false">
-    <a-assets>
-      <video id="Video_Asset_0" src="videos/celia.mp4" playsinline webkit-playsinline loop></video>
-    </a-assets>
+  <a-scene vr-mode-ui="enabled: false">
+    <a-assets>
+      <video id="Video_Asset_0" src="videos/celia.mp4" playsinline webkit-playsinline loop></video>
+    </a-assets>
 
-    <a-entity id="video-holder" position="0 1.7 -10"
-      animation="property: position; to: 0 1.7 -4; dur: 1500; easing: easeOutElastic">
-      <a-video width="3" height="3" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
-    </a-entity>
+    <a-entity id="video-holder" position="0 1.7 -10"
+      animation="property: position; to: 0 1.7 -4; dur: 1500; easing: easeOutElastic">
+      <a-video width="3" height="3" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
+    </a-entity>
 
-    <a-camera id="camera1"></a-camera>
-  </a-scene>
+    <a-camera id="camera1"></a-camera>
+  </a-scene>
 
-  <div id="footerSocial">
-    <a href="https://www.facebook.com/deputadaceliajordao/" target="_blank" class="facebook" aria-label="Facebook">
-      <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.87v-6.98h-3v-2.89h3v-2.2c0-3 1.79-4.66 4.53-4.66 1.31 0 2.68.24 2.68.24v3h-1.54c-1.52 0-1.99.95-1.99 1.92v2.7h3.4l-.54 2.89h-2.86v6.98A10 10 0 0 0 22 12"/></svg>
-    </a>
-    <a href="https://www.instagram.com/deputadaceliajordao/" target="_blank" class="instagram" aria-label="Instagram">
-      <svg viewBox="0 0 24 24"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
-    </a>
-    <a href="https://wa.me/5524974013260" target="_blank" class="whatsapp" aria-label="WhatsApp">
-      <svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.955 11.955 0 0 0 12 0a12 12 0 0 0-11.99 11.89c0 2.12.56 4.09 1.52 5.82L0 24l6.6-2.43A11.95 11.95 0 0 0 12 24c6.63 0 12-5.37 12-12a11.89 11.89 0 0 0-3.48-8.52zm-8.52 15.2c-1.95 0-3.77-.62-5.23-1.68l-.37-.23-3.1 1.14 1.15-3.03-.24-.38a8.39 8.39 0 0 1-1.31-4.88c0-4.65 3.78-8.42 8.42-8.42 2.24 0 4.35.88 5.92 2.48a8.288 8.288 0 0 1 2.5 6c0 4.65-3.78 8.43-8.43 8.43zm4.52-6.28c-.25-.12-1.47-.72-1.7-.8-.23-.08-.4-.12-.57.12-.16.25-.62.8-.76.97-.14.16-.28.18-.53.06-.25-.13-1.05-.39-2-1.24-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.42.08-.16.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.87-.2-.49-.41-.42-.57-.43-.15-.01-.32-.01-.49-.01-.16 0-.42.06-.64.31-.22.25-.84.82-.84 2 .01 1.18.86 2.32.98 2.49.12.17 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.15 1.53.09.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>
-    </a>
-  </div>
+  <button id="redirectButton" onclick="window.location.href='https://www.youtube.com/watch?v=L-n4ZvCJTd8'">Saiba Mais</button>
 
-  <script>
-    const video = document.querySelector('#Video_Asset_0');
-    const playPauseButton = document.getElementById('playPauseButton');
-    
-    window.addEventListener('load', () => {
-      const message = document.getElementById('initialMessage');
-      if (message) {
-        setTimeout(() => {
-          message.style.display = 'none';
-        }, 6000); 
-      }
-    });
+  <div id="footerSocial">
+    <a href="https://www.facebook.com/deputadaceliajordao/" target="_blank" class="facebook" aria-label="Facebook">
+      <svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 1 0-11.5 9.87v-6.98h-3v-2.89h3v-2.2c0-3 1.79-4.66 4.53-4.66 1.31 0 2.68.24 2.68.24v3h-1.54c-1.52 0-1.99.95-1.99 1.92v2.7h3.4l-.54 2.89h-2.86v6.98A10 10 0 0 0 22 12"/></svg>
+    </a>
+    <a href="https://www.instagram.com/deputadaceliajordao/" target="_blank" class="instagram" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm0 2h10c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3zm5 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>
+    </a>
+    <a href="https://wa.me/5524974013260" target="_blank" class="whatsapp" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M20.52 3.48A11.955 11.955 0 0 0 12 0a12 12 0 0 0-11.99 11.89c0 2.12.56 4.09 1.52 5.82L0 24l6.6-2.43A11.95 11.95 0 0 0 12 24c6.63 0 12-5.37 12-12a11.89 11.89 0 0 0-3.48-8.52zm-8.52 15.2c-1.95 0-3.77-.62-5.23-1.68l-.37-.23-3.1 1.14 1.15-3.03-.24-.38a8.39 8.39 0 0 1-1.31-4.88c0-4.65 3.78-8.42 8.42-8.42 2.24 0 4.35.88 5.92 2.48a8.288 8.288 0 0 1 2.5 6c0 4.65-3.78 8.43-8.43 8.43zm4.52-6.28c-.25-.12-1.47-.72-1.7-.8-.23-.08-.4-.12-.57.12-.16.25-.62.8-.76.97-.14.16-.28.18-.53.06-.25-.13-1.05-.39-2-1.24-.74-.66-1.24-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.44.12-.15.16-.25.25-.42.08-.16.04-.31-.02-.44-.06-.13-.57-1.37-.78-1.87-.2-.49-.41-.42-.57-.43-.15-.01-.32-.01-.49-.01-.16 0-.42.06-.64.31-.22.25-.84.82-.84 2 .01 1.18.86 2.32.98 2.49.12.17 1.7 2.6 4.12 3.64.58.25 1.03.4 1.38.51.58.18 1.11.15 1.53.09.47-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/></svg>
+    </a>
+  </div>
 
-    playPauseButton.addEventListener('click', () => {
-      if (video.paused) {
-        video.muted = false; 
-        video.play();
-        playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
-        playPauseButton.classList.remove('is-paused');
-        playPauseButton.classList.add('is-playing');
-      } else {
-        video.pause();
-        playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
-        playPauseButton.classList.remove('is-playing');
-        playPauseButton.classList.add('is-paused');
-      }
-      playPauseButton.classList.add('rotating');
-      setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
-    });
-  </script>
+  <script>
+    const video = document.querySelector('#Video_Asset_0');
+    const playPauseButton = document.getElementById('playPauseButton');
+    
+    window.addEventListener('load', () => {
+      const message = document.getElementById('initialMessage');
+      if (message) {
+        setTimeout(() => {
+          message.style.display = 'none';
+        }, 6000); 
+      }
+    });
+
+    playPauseButton.addEventListener('click', () => {
+      if (video.paused) {
+        video.muted = false; 
+        video.play();
+        playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
+        playPauseButton.classList.remove('is-paused');
+        playPauseButton.classList.add('is-playing');
+      } else {
+        video.pause();
+        playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
+        playPauseButton.classList.remove('is-playing');
+        playPauseButton.classList.add('is-paused');
+      }
+      playPauseButton.classList.add('rotating');
+      setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
+    });
+  </script>
 </body>
 </html>
