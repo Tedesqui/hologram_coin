@@ -3,32 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>𝐇𝐎𝐋𝐎𝐆𝐑𝐀𝐌 𝐂𝐎𝐈𝐍 - Markerless AR</title>
+  <title>𝐇𝐎𝐋𝐎𝐆𝐑𝐀𝐌 𝐂𝐎𝐈𝐍 - World AR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="https://unpkg.com/aframe-html-shader@0.2.0/dist/aframe-html-shader.min.js"></script>
-  
+
   <style>
     body { margin: 0; overflow: hidden; }
-    /* A div 'overlay' conterá toda a nossa interface HTML */
+    /* Overlay para a interface HTML sobre a cena AR */
     #overlay {
       position: fixed;
       top: 0; left: 0;
       width: 100%;
       height: 100%;
-      pointer-events: none; /* Permite que os toques "atravessem" a div e cheguem na cena AR */
+      pointer-events: none; /* Deixa os toques "atravessarem" para a cena */
     }
     #ui-content {
-      /* Habilita os eventos de clique apenas para os botões dentro do overlay */
-      pointer-events: auto;
+      pointer-events: auto; /* Reativa os eventos para os botões */
     }
     #initialMessage, #playPauseButton { font-family: sans-serif; }
     #initialMessage { position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); padding: 1em; background-color: rgba(0,0,0,0.85); color: white; border-radius: 10px; text-align: center; }
     #playPauseButton { position: absolute; top: 20px; left: 20px; z-index: 999; background-color: rgba(0,0,0,0.42); border: none; border-radius: 5px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; padding: 10px 20px; color: white; }
     
-    /* Player de vídeo que ficará oculto */
+    /* Container do vídeo que ficará oculto */
     #video-player-container {
       position: absolute;
       top: -9999px; left: -9999px;
@@ -43,28 +42,27 @@
   
   <div id="overlay">
     <div id="ui-content">
-      <div id="initialMessage">Mova o celular para detectar o ambiente e toque na tela para posicionar o holograma.</div>
-      <button id="playPauseButton" style="display: none;">▶︎ Play</button>
+      <div id="initialMessage">Iniciando a câmera...</div>
+      <button id="playPauseButton">▶︎ Play</button>
     </div>
   </div>
 
   <a-scene
-    webxr="requiredFeatures: hit-test, dom-overlay; overlayElement: #overlay;"
+    webxr="requiredFeatures: dom-overlay; overlayElement: #overlay;"
     vr-mode-ui="enabled: false;"
     renderer="logarithmicDepthBuffer: true;">
 
-    <a-entity id="video-hologram" visible="false">
+    <a-camera></a-camera>
+
+    <a-entity 
+      id="video-hologram" 
+      position="0 1.6 -3" rotation="0 0 0">
+      
       <a-plane
         width="1.5"
-        height="0.84" 
+        height="0.84"
         material="shader: html; target: #liveVideo; transparent: false; fps: 30;">
       </a-plane>
-    </a-entity>
-    
-    <a-entity
-      id="hit-test-manager"
-      ar-hit-test="type: tap;"
-      event-manager>
     </a-entity>
 
   </a-scene>
@@ -73,11 +71,13 @@
     window.addEventListener('load', () => {
       const videoElement = document.getElementById('liveVideo');
       const playPauseButton = document.getElementById('playPauseButton');
-      const videoHologram = document.getElementById('video-hologram');
-      const hitTestManager = document.getElementById('hit-test-manager');
       const initialMessage = document.getElementById('initialMessage');
-      
       const videoSrc = "https://cdn-vos-ppp-01.vos360.video/Content/HLS_LIVE/hd_v6/playlist.m3u8";
+
+      // Esconde a mensagem inicial após um tempo
+      setTimeout(() => { 
+        if(initialMessage) initialMessage.style.display = 'none';
+      }, 5000);
 
       // Configura o hls.js para o vídeo
       if (Hls.isSupported()) {
@@ -88,31 +88,7 @@
         videoElement.src = videoSrc;
       }
 
-      // 4. LÓGICA DE CONTROLE PARA POSICIONAR O VÍDEO
-      let hasPlaced = false;
-      hitTestManager.addEventListener('ar-hit-test-start', () => {
-        initialMessage.textContent = "Escaneando... procure por superfícies planas.";
-      });
-      hitTestManager.addEventListener('ar-hit-test-achieved', () => {
-        initialMessage.textContent = "Ambiente detectado! Toque para posicionar.";
-      });
-
-      hitTestManager.addEventListener('ar-hit-test-select', (event) => {
-        // O evento 'ar-hit-test-select' é disparado quando o usuário toca em uma superfície
-        if (hasPlaced) return; // Impede de posicionar mais de uma vez
-        
-        const position = event.detail.position;
-        videoHologram.setAttribute('position', position);
-        videoHologram.setAttribute('visible', 'true');
-        
-        // Exibe o botão de play e esconde a mensagem inicial
-        initialMessage.style.display = 'none';
-        playPauseButton.style.display = 'inline-flex';
-        
-        hasPlaced = true;
-      });
-
-      // Lógica do botão de play/pause (sem alterações)
+      // Lógica do botão de play/pause
       let isPlaying = false;
       playPauseButton.addEventListener('click', () => {
         if (!isPlaying) {
