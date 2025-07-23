@@ -59,7 +59,6 @@
         font-size: 44px;
         position: relative;
         bottom: 3px;
-        /* Deslocamento para a direita alterado para 5px */
         left: 5px;   
     }
     #playPauseButton .text {
@@ -121,10 +120,11 @@
   </button>
 
   <a-scene vr-mode-ui="enabled: false">
+    
     <a-entity id="video-holder" position="0 1.7 -10"
       animation="property: position; to: 0 1.7 -4; dur: 1500; easing: easeOutElastic">
       <a-entity id="youtube-video" 
-                youtube="src: HB2Bd1zGND8; width: 3; height: 1.6875" 
+                youtube="src: k6L3z81iVI8; width: 3; height: 1.6875" 
                 look-at="[camera]">
       </a-entity>
     </a-entity>
@@ -145,10 +145,52 @@
   </div>
 
   <script>
+    // Seleciona os elementos da página
     const youtubeEntity = document.querySelector('#youtube-video');
     const playPauseButton = document.getElementById('playPauseButton');
-    let isVideoPlaying = false; // Variável para controlar o estado do vídeo
     
+    // Variável para sabermos se o vídeo está tocando ou não
+    let isVideoPlaying = false; 
+
+    // 1. Informa ao usuário que o vídeo está carregando
+    playPauseButton.innerHTML = '<span class="text">Carregando...</span>';
+    playPauseButton.disabled = true; // Desabilita o botão temporariamente
+
+    // 2. Aguarda o componente do YouTube avisar que está pronto
+    youtubeEntity.addEventListener('youtube-ready', () => {
+      
+      console.log("Componente do YouTube está pronto!");
+
+      // 3. Reativa o botão de Play e restaura seu visual original
+      playPauseButton.disabled = false;
+      playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
+      
+      // 4. Agora sim, adiciona a funcionalidade de clique ao botão
+      playPauseButton.addEventListener('click', () => {
+        const youtubeComponent = youtubeEntity.components.youtube;
+
+        if (!isVideoPlaying) {
+          youtubeComponent.playVideo(); // Usa a função do componente para tocar
+          isVideoPlaying = true;
+          // Atualiza o visual do botão para "Pause"
+          playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
+          playPauseButton.classList.remove('is-paused');
+          playPauseButton.classList.add('is-playing');
+        } else {
+          youtubeComponent.pauseVideo(); // Usa a função do componente para pausar
+          isVideoPlaying = false;
+          // Atualiza o visual do botão para "Play"
+          playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
+          playPauseButton.classList.remove('is-playing');
+          playPauseButton.classList.add('is-paused');
+        }
+        // Mantém a animação de rotação do botão
+        playPauseButton.classList.add('rotating');
+        setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
+      });
+    });
+
+    // Esta parte, que esconde a mensagem inicial, continua igual
     window.addEventListener('load', () => {
       const message = document.getElementById('initialMessage');
       if (message) {
@@ -156,28 +198,6 @@
           message.style.display = 'none';
         }, 6000); 
       }
-    });
-
-    playPauseButton.addEventListener('click', () => {
-      // Garante que o componente do YouTube já foi carregado
-      const youtubeComponent = youtubeEntity.components.youtube;
-      if (!youtubeComponent) return; 
-
-      if (!isVideoPlaying) {
-        youtubeComponent.playVideo();
-        isVideoPlaying = true;
-        playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
-        playPauseButton.classList.remove('is-paused');
-        playPauseButton.classList.add('is-playing');
-      } else {
-        youtubeComponent.pauseVideo();
-        isVideoPlaying = false;
-        playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
-        playPauseButton.classList.remove('is-playing');
-        playPauseButton.classList.add('is-paused');
-      }
-      playPauseButton.classList.add('rotating');
-      setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
   </script>
 </body>
