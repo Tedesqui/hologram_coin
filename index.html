@@ -1,3 +1,37 @@
+Claro, vamos resolver isso.
+
+O problema do botão de Play/Pause sumindo é o mesmo que estava fazendo a mensagem inicial aparecer atrás do vídeo. A cena de Realidade Aumentada (o vídeo 3D) está se sobrepondo aos botões da página.
+
+A correção que fiz na mensagem anterior já resolve os dois problemas de uma vez, garantindo que todos os elementos da interface (botão, mensagem, ícones sociais) fiquem sempre na frente da cena 3D.
+
+Vou te mandar novamente o código completo com a correção. Peço que substitua todo o seu código por este para garantir que a solução seja aplicada.
+
+A Correção: A única alteração necessária está no CSS, dentro da tag <style>, onde adicionamos uma regra para o a-scene para controlar sua camada:
+
+CSS
+
+<style>
+    /* A CORREÇÃO ESTÁ AQUI */
+    a-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1; /* Força a cena 3D para a camada de trás */
+    }
+
+    /* O resto do CSS garante que os botões tenham uma camada superior (ex: z-index: 999) */
+    #playPauseButton {
+        z-index: 999;
+        /* ... outros estilos ... */
+    }
+    /* ... */
+</style>
+Abaixo está o código completo e funcional. Por favor, copie e cole o bloco inteiro.
+
+HTML
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -10,7 +44,7 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
-    /* CORREÇÃO ADICIONADA AQUI: 
+    /* CORREÇÃO ADICIONADA: 
       Esta regra força a cena 3D/AR para o fundo, garantindo que
       os botões e textos em HTML fiquem visíveis na frente.
     */
