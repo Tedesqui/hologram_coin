@@ -10,6 +10,16 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
+    /* Garante que a cena AR não cubra os botões */
+    a-scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    
     #initialMessage {
       position: fixed;
       top: calc(50% + 100px); 
@@ -73,12 +83,11 @@
       transform: scale(1.05);
     }
 
-    /* MODIFICADO: Estilo do botão para posicioná-lo acima do rodapé */
+    /* Estilo para o novo botão de redirecionamento */
     #redirectButton {
       position: fixed;
-      bottom: 95px; /* Posição vertical: 95px a partir do fundo */
-      left: 50%; /* Centraliza horizontalmente */
-      transform: translateX(-50%); /* Ajuste fino para centralização */
+      top: 20px;
+      right: 20px;
       z-index: 999;
       background-color: #007bff;
       color: white;
@@ -88,6 +97,7 @@
       font-family: sans-serif;
       font-size: 16px;
       cursor: pointer;
+      text-decoration: none;
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
     #redirectButton:hover {
@@ -140,6 +150,8 @@
     <span class="icon">▶︎</span> <span class="text">Play</span>
   </button>
 
+  <a id="redirectButton" href="https://www.youtube.com/watch?v=L-n4ZvCJTd8" target="_blank" rel="noopener noreferrer">Saiba Mais</a>
+
   <a-scene vr-mode-ui="enabled: false">
     <a-assets>
       <video id="Video_Asset_0" src="videos/celia.mp4" playsinline webkit-playsinline loop></video>
@@ -152,8 +164,6 @@
 
     <a-camera id="camera1"></a-camera>
   </a-scene>
-
-  <button id="redirectButton" onclick="window.location.href='https://www.youtube.com/watch?v=L-n4ZvCJTd8'">Saiba Mais</button>
 
   <div id="footerSocial">
     <a href="https://www.facebook.com/deputadaceliajordao/" target="_blank" class="facebook" aria-label="Facebook">
