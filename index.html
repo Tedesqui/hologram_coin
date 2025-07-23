@@ -1,37 +1,3 @@
-Claro, vamos resolver isso.
-
-O problema do botão de Play/Pause sumindo é o mesmo que estava fazendo a mensagem inicial aparecer atrás do vídeo. A cena de Realidade Aumentada (o vídeo 3D) está se sobrepondo aos botões da página.
-
-A correção que fiz na mensagem anterior já resolve os dois problemas de uma vez, garantindo que todos os elementos da interface (botão, mensagem, ícones sociais) fiquem sempre na frente da cena 3D.
-
-Vou te mandar novamente o código completo com a correção. Peço que substitua todo o seu código por este para garantir que a solução seja aplicada.
-
-A Correção: A única alteração necessária está no CSS, dentro da tag <style>, onde adicionamos uma regra para o a-scene para controlar sua camada:
-
-CSS
-
-<style>
-    /* A CORREÇÃO ESTÁ AQUI */
-    a-scene {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1; /* Força a cena 3D para a camada de trás */
-    }
-
-    /* O resto do CSS garante que os botões tenham uma camada superior (ex: z-index: 999) */
-    #playPauseButton {
-        z-index: 999;
-        /* ... outros estilos ... */
-    }
-    /* ... */
-</style>
-Abaixo está o código completo e funcional. Por favor, copie e cole o bloco inteiro.
-
-HTML
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -44,10 +10,12 @@ HTML
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
-    /* CORREÇÃO ADICIONADA: 
-      Esta regra força a cena 3D/AR para o fundo, garantindo que
-      os botões e textos em HTML fiquem visíveis na frente.
-    */
+    /******************************************************************
+     * A CORREÇÃO DEFINITIVA ESTÁ AQUI.
+     * Esta regra de CSS força a cena 3D (a-scene) para uma camada
+     * inferior (z-index: 1), garantindo que os botões e textos,
+     * que possuem um z-index maior (ex: 999), fiquem sempre na frente.
+    ******************************************************************/
     a-scene {
       position: absolute;
       top: 0;
@@ -68,7 +36,7 @@ HTML
       border-radius: 10px;
       text-align: center;
       font-size: 18px;
-      z-index: 1001; /* z-index alto para ficar na frente */
+      z-index: 1001; /* Camada superior para a mensagem */
       max-width: 90%;
       font-family: sans-serif;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -78,7 +46,7 @@ HTML
       position: fixed;
       top: 20px;
       left: 20px;
-      z-index: 999; /* z-index alto para ficar na frente */
+      z-index: 999; /* Camada superior para o botão */
       background-color: rgba(0, 0, 0, 0.42); 
       border: none;
       border-radius: 5px;
@@ -129,7 +97,7 @@ HTML
       display: flex;
       justify-content: center;
       gap: 40px;
-      z-index: 999; /* z-index alto para ficar na frente */
+      z-index: 999; /* Camada superior para o rodapé */
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47); 
     }
