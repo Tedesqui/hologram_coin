@@ -10,7 +10,6 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
-    /* Seu CSS continua o mesmo */
     #initialMessage {
       position: fixed;
       top: calc(50% + 100px);
@@ -155,15 +154,20 @@
       <a-video width="7" height="7" material="shader: flat; src: #Video_Asset_0; transparent: true;"></a-video>
     </a-entity>
 
-    <a-entity id="imagem-final-entity" position="0 -1 -8" look-at="[camera]" visible="false">
-        <a-image src="#imagem-final-asset" width="4" height="4" material="transparent: true;"></a-image>
+    <a-entity id="imagem-final-entity" position="0 2 -8" look-at="[camera]" visible="false">
+        <a-image src="#imagem-final-asset" width="5" height="5" material="transparent: true;"></a-image>
     </a-entity>
 
-
-    <a-camera id="camera1">
-      <a-cursor></a-cursor>
-    </a-camera>
+    <a-camera id="camera1"></a-camera>
   </a-scene>
+
+  <div id="central-button-container">
+    <a href="https://www.youtube.com/watch?v=L-n4ZvCJTd8" target="_blank" rel="noopener noreferrer" class="dollar" aria-label="Link Cifrão">
+      <svg viewBox="0 0 24 24">
+        <path d="M13.5 13.5c0 .8-.7 1.5-1.5 1.5H10v1.5h1.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5H8.5v-1.5H10c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5H8.5V9H10c.8 0 1.5-.7 1.5-1.5S10.8 6 10 6H8.5V4.5H10c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5H8.5v6H12c.8 0 1.5-.7 1.5-1.5zM12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
+      </svg>
+    </a>
+  </div>
 
   <div id="footerSocial">
     <a href="https://www.facebook.com/deputadaceliajordao/" target="_blank" class="facebook" aria-label="Facebook">
@@ -196,10 +200,12 @@
     // --- Lógica do botão Play/Pause ---
     playPauseButton.addEventListener('click', () => {
       if (video.paused) {
+        // **NOVA LÓGICA**: Se a imagem estiver visível, esconda-a e mostre o vídeo.
         if (imageEntity.getAttribute('visible')) {
           imageEntity.setAttribute('visible', 'false');
           videoEntity.setAttribute('visible', 'true');
         }
+
         video.muted = false;
         video.play();
         playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
@@ -222,17 +228,10 @@
         videoEntity.setAttribute('visible', 'false');
         imageEntity.setAttribute('visible', 'true');
 
+        // **NOVA LÓGICA**: Reseta o botão para o estado "Play".
         playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
         playPauseButton.classList.remove('is-playing');
         playPauseButton.classList.add('is-paused');
-    });
-
-    // --- NOVO: Lógica para clicar na imagem final ---
-    const linkUrl = 'https://www.youtube.com/watch?v=L-n4ZvCJTd8'; // Link do botão removido
-
-    imageEntity.addEventListener('click', function() {
-        console.log('Imagem final clicada! Abrindo link...');
-        window.open(linkUrl, '_blank'); // Abre o link em uma nova aba
     });
 
   </script>
