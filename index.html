@@ -147,11 +147,17 @@
   <a-scene vr-mode-ui="enabled: false">
     <a-assets>
       <video id="Video_Asset_0" src="videos/hannah.webm" playsinline webkit-playsinline></video>
+      <img id="imagem-final-asset" src="videos/hannah.png">
     </a-assets>
 
-    <a-entity id="video-inicial-entity" position="0 -1 -8" look-at="[camera]">
+    <a-entity id="video-inicial-entity" position="0 -1 -8" look-at="[camera]" visible="true">
       <a-video width="7" height="7" material="shader: flat; src: #Video_Asset_0; transparent: true;"></a-video>
     </a-entity>
+
+    <a-entity id="imagem-final-entity" position="0 -1 -8" look-at="[camera]" visible="false">
+        <a-image src="#imagem-final-asset" width="7" height="7" material="transparent: true;"></a-image>
+    </a-entity>
+
 
     <a-camera id="camera1"></a-camera>
   </a-scene>
@@ -205,6 +211,20 @@
       playPauseButton.classList.add('rotating');
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
+
+    // --- 3. LÓGICA PARA TROCAR VIDEO PELA IMAGEM ---
+    video.addEventListener('ended', function() {
+        console.log('Vídeo terminou!');
+        
+        // Esconde a entidade do vídeo
+        const videoEntity = document.querySelector('#video-inicial-entity');
+        videoEntity.setAttribute('visible', 'false');
+
+        // Mostra a entidade da imagem
+        const imageEntity = document.querySelector('#imagem-final-entity');
+        imageEntity.setAttribute('visible', 'true');
+    });
+
   </script>
 </body>
 </html>
