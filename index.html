@@ -146,12 +146,11 @@
 
   <a-scene vr-mode-ui="enabled: false">
     <a-assets>
-      <video id="Video_Asset_0" src="videos/celia.mp4" playsinline webkit-playsinline loop></video>
+      <video id="Video_Asset_0" src="videos/celia.webm" playsinline webkit-playsinline loop></video>
     </a-assets>
 
-    <a-entity id="video-holder" position="0 1.7 -10"
-      animation="property: position; to: 0 1.7 -4; dur: 1500; easing: easeOutElastic">
-      <a-video width="3" height="3" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
+    <a-entity id="video-holder" position="0 -1 -8"
+      <a-video width="7" height="7" src="#Video_Asset_0" look-at="[camera]" color="#FFFFFF" loop></a-video>
     </a-entity>
 
     <a-camera id="camera1"></a-camera>
