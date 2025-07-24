@@ -1,3 +1,11 @@
+Com certeza. Para mover os botões de redes sociais 20 pixels para a direita sem afetar o ícone de cifrão, adicionei uma única linha de CSS ao id="footerSocial".
+
+A alteração específica foi a adição de transform: translateX(20px);, que desloca o grupo de ícones do rodapé para a direita.
+
+Abaixo, o código completo com a modificação.
+
+HTML
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -73,19 +81,17 @@
       transform: scale(1.05);
     }
 
-    /* Novo container para o botão de cifrão */
     #central-button-container {
       position: fixed;
-      bottom: 100px; /* Posição acima do rodapé */
+      bottom: 100px; 
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
     }
 
-    /* Aumenta o tamanho do botão de cifrão em 50% */
     #central-button-container .dollar {
-      width: 51.84px;  /* 34.56px * 1.5 */
-      height: 51.84px; /* 34.56px * 1.5 */
+      width: 51.84px; 
+      height: 51.84px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,9 +107,10 @@
       justify-content: center;
       align-items: center;
       gap: 40px;
-      z-index: 998; /* z-index menor para ficar atrás de outros elementos se necessário */
+      z-index: 998; 
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47);
+      transform: translateX(20px); /* <-- ALTERAÇÃO AQUI: Move 20px para a direita */
     }
     #footerSocial a {
       display: flex;
