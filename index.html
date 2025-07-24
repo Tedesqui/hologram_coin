@@ -1,3 +1,44 @@
+Com certeza. Para que o vídeo reinicie ao clicar no botão "Play" depois que a imagem apareceu, você precisa atualizar a lógica do botão.
+
+Ele deve verificar se a imagem está visível. Se estiver, ele deve esconder a imagem, mostrar o vídeo novamente e então iniciar a reprodução. Também vamos ajustar o botão para que ele volte ao estado "Play" quando o vídeo terminar.
+
+Explicação das Mudanças
+1. Modificando o Botão Play/Pause ▶️
+No event listener do playPauseButton, adicionamos uma verificação. Antes de dar play no vídeo, ele confere se a entidade da imagem está visível. Se estiver, ele esconde a imagem e mostra a entidade do vídeo.
+
+JavaScript
+
+// Dentro do evento de clique do playPauseButton
+if (video.paused) {
+  // NOVO: Verifica se a imagem está na tela para reiniciar o ciclo
+  if (imageEntity.getAttribute('visible')) {
+    imageEntity.setAttribute('visible', 'false'); // Esconde a imagem
+    videoEntity.setAttribute('visible', 'true');  // Mostra o vídeo
+  }
+  
+  video.muted = false;
+  video.play();
+  // ... o resto do código para atualizar o botão
+}
+2. Ajustando o Fim do Vídeo ⏹️
+Quando o vídeo termina (ended), o botão ainda mostrava o ícone de "Pause". Adicionamos o código para que ele volte ao estado de "Play", indicando que o usuário pode clicar para começar de novo.
+
+JavaScript
+
+// Dentro do evento 'ended' do vídeo
+video.addEventListener('ended', function() {
+  // ... código para trocar vídeo pela imagem ...
+
+  // NOVO: Reseta o botão para o estado "Play"
+  playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
+  playPauseButton.classList.remove('is-playing');
+  playPauseButton.classList.add('is-paused');
+});
+Código Completo
+Aqui está o seu arquivo HTML completo com as modificações. Apenas copie e cole.
+
+HTML
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -102,7 +143,7 @@
       z-index: 998;
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47);
-      transform: translateX(8px); /* <-- ALTERAÇÃO AQUI: Ajustado para 8px */
+      transform: translateX(8px);
     }
     #footerSocial a {
       display: flex;
@@ -158,7 +199,6 @@
         <a-image src="#imagem-final-asset" width="4" height="4" material="transparent: true;"></a-image>
     </a-entity>
 
-
     <a-camera id="camera1"></a-camera>
   </a-scene>
 
@@ -183,8 +223,11 @@
   </div>
 
   <script>
+    // --- Referências aos elementos ---
     const video = document.querySelector('#Video_Asset_0');
     const playPauseButton = document.getElementById('playPauseButton');
+    const videoEntity = document.querySelector('#video-inicial-entity');
+    const imageEntity = document.querySelector('#imagem-final-entity');
 
     window.addEventListener('load', () => {
       const message = document.getElementById('initialMessage');
@@ -195,8 +238,15 @@
       }
     });
 
+    // --- Lógica do botão Play/Pause ---
     playPauseButton.addEventListener('click', () => {
       if (video.paused) {
+        // **NOVA LÓGICA**: Se a imagem estiver visível, esconda-a e mostre o vídeo.
+        if (imageEntity.getAttribute('visible')) {
+          imageEntity.setAttribute('visible', 'false');
+          videoEntity.setAttribute('visible', 'true');
+        }
+
         video.muted = false;
         video.play();
         playPauseButton.innerHTML = '<span class="icon">⏸︎</span> <span class="text">Pause</span>';
@@ -212,17 +262,17 @@
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
 
-    // --- 3. LÓGICA PARA TROCAR VIDEO PELA IMAGEM ---
+    // --- Lógica para quando o vídeo termina ---
     video.addEventListener('ended', function() {
         console.log('Vídeo terminou!');
         
-        // Esconde a entidade do vídeo
-        const videoEntity = document.querySelector('#video-inicial-entity');
         videoEntity.setAttribute('visible', 'false');
-
-        // Mostra a entidade da imagem
-        const imageEntity = document.querySelector('#imagem-final-entity');
         imageEntity.setAttribute('visible', 'true');
+
+        // **NOVA LÓGICA**: Reseta o botão para o estado "Play".
+        playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
+        playPauseButton.classList.remove('is-playing');
+        playPauseButton.classList.add('is-paused');
     });
 
   </script>
