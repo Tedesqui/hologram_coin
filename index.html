@@ -1,36 +1,3 @@
-Claro. Para adicionar o texto abaixo do PNG, você só precisa adicionar um elemento <a-text> dentro da mesma entidade que contém a imagem (imagem-final-entity).
-
-Dessa forma, o texto aparecerá e desaparecerá junto com a imagem, sem precisar alterar o JavaScript.
-
-Explicação da Mudança
-Dentro da entidade com o id="imagem-final-entity", logo após o <a-image>, foi adicionado um componente <a-text>.
-
-value: Define o texto a ser exibido. Usei \n para criar uma quebra de linha.
-
-position: Posiciona o texto 3 unidades para baixo (-3 no eixo Y) em relação ao centro da imagem.
-
-align: Centraliza o texto.
-
-width: Define a largura da caixa de texto para que o conteúdo seja quebrado em múltiplas linhas.
-
-HTML
-
-<a-entity id="imagem-final-entity" position="0 1 -8" look-at="[camera]" visible="false">
-    <a-image src="#imagem-final-asset" width="5" height="5" material="transparent: true;"></a-image>
-    
-    <a-text
-      value="BUY ME NOW.\nCLICK IN 栄 SYMBOL"
-      align="center"
-      color="white"
-      width="6"
-      position="0 -3 0">
-    </a-text>
-</a-entity>
-Código Completo
-Aqui está o seu arquivo HTML completo com a adição. Apenas copie e cole.
-
-HTML
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
