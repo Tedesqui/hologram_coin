@@ -1,3 +1,9 @@
+Peço mil desculpas novamente pela falha. Aqui está o código completo, com os ícones de redes sociais movidos 10 pixels para a esquerda em relação à posição anterior, conforme solicitado.
+
+A única alteração foi na regra de CSS #footerSocial, onde transform: translateX(20px); foi ajustado para transform: translateX(10px);.
+
+HTML
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -75,14 +81,14 @@
 
     #central-button-container {
       position: fixed;
-      bottom: 100px; 
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 999;
     }
 
     #central-button-container .dollar {
-      width: 51.84px; 
+      width: 51.84px;
       height: 51.84px;
       display: flex;
       align-items: center;
@@ -99,10 +105,10 @@
       justify-content: center;
       align-items: center;
       gap: 40px;
-      z-index: 998; 
+      z-index: 998;
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47);
-      transform: translateX(20px); /* <-- ALTERAÇÃO AQUI: Move 20px para a direita */
+      transform: translateX(10px); /* <-- ALTERAÇÃO AQUI: Ajustado para 10px */
     }
     #footerSocial a {
       display: flex;
