@@ -81,13 +81,27 @@
       z-index: 999;
     }
 
-    #central-button-container .dollar {
-      width: 51.84px;
-      height: 51.84px;
+    /* ALTERAÇÃO CSS: Estilos para o novo botão */
+    .prosperity-button {
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 51.84px;
+      height: 51.84px;
+      background-color: #28a745; /* Fundo verde */
+      color: white; /* Símbolo branco */
+      border-radius: 50%; /* Botão circular */
+      font-size: 30px; /* Tamanho do símbolo */
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
     }
+
+    .prosperity-button:hover {
+      transform: scale(1.1); /* Efeito de zoom ao passar o mouse */
+    }
+
 
     #footerSocial {
       position: fixed;
@@ -117,7 +131,7 @@
       height: 100%;
       transition: transform 0.3s ease;
     }
-    #footerSocial a:hover svg, #central-button-container a:hover svg {
+    #footerSocial a:hover svg {
       transform: scale(1.1);
     }
 
@@ -130,7 +144,6 @@
     #footerSocial .facebook svg { fill: #00008B; }
     #footerSocial .instagram svg { fill: #833AB4; }
     #footerSocial .telegram svg { fill: #0088cc; }
-    #central-button-container .dollar svg { fill: #28a745; }
   </style>
 </head>
 
@@ -154,7 +167,7 @@
       <a-video width="7" height="7" material="shader: flat; src: #Video_Asset_0; transparent: true;"></a-video>
     </a-entity>
 
-    <a-entity id="imagem-final-entity" position="0 2 -8" look-at="[camera]" visible="false">
+    <a-entity id="imagem-final-entity" position="0 1 -8" look-at="[camera]" visible="false">
         <a-image src="#imagem-final-asset" width="5" height="5" material="transparent: true;"></a-image>
     </a-entity>
 
@@ -162,11 +175,7 @@
   </a-scene>
 
   <div id="central-button-container">
-    <a href="https://www.youtube.com/watch?v=L-n4ZvCJTd8" target="_blank" rel="noopener noreferrer" class="dollar" aria-label="Link Cifrão">
-      <svg viewBox="0 0 24 24">
-        <path d="M13.5 13.5c0 .8-.7 1.5-1.5 1.5H10v1.5h1.5c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5H8.5v-1.5H10c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5H8.5V9H10c.8 0 1.5-.7 1.5-1.5S10.8 6 10 6H8.5V4.5H10c.8 0 1.5.7 1.5 1.5s-.7 1.5-1.5 1.5H8.5v6H12c.8 0 1.5-.7 1.5-1.5zM12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"/>
-      </svg>
-    </a>
+    <a href="https://www.youtube.com/watch?v=L-n4ZvCJTd8" target="_blank" rel="noopener noreferrer" class="prosperity-button" aria-label="Link Prosperidade">栄</a>
   </div>
 
   <div id="footerSocial">
