@@ -114,7 +114,8 @@
       z-index: 998;
       background-color: rgba(0, 0, 0, 0.1);
       box-shadow: 0 0 19.5px rgba(0, 0, 0, 0.47);
-      transform: translateX(8px);
+      /* --- CSS ALTERADO --- */
+      /* transform: translateX(8px); --- ESTA LINHA FOI REMOVIDA PARA CORRIGIR O ALINHAMENTO --- */
     }
     #footerSocial a {
       display: flex;
@@ -133,14 +134,19 @@
       transform: scale(1.1);
     }
 
+    /* --- CSS ADICIONADO --- */
+    #footerSocial a.instagram {
+      width: 41.47px; /* Aumento de 20% sobre 34.56px */
+      height: 41.47px;
+    }
+    
     #footerSocial a.telegram,
     #footerSocial a.telegram svg {
         width: 51.84px;
         height: 51.84px;
     }
 
-    /* --- CSS ALTERADO --- */
-    #footerSocial .twitter svg { fill: #000000; } /* Cor para o novo ícone do Twitter */
+    #footerSocial .twitter svg { fill: #000000; } 
     #footerSocial .instagram svg { fill: #833AB4; }
     #footerSocial .telegram svg { fill: #0088cc; }
   </style>
