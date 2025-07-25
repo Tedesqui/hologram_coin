@@ -10,7 +10,6 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
 
   <style>
-    /* SEU CSS CONTINUA O MESMO */
     #initialMessage {
       position: fixed;
       top: calc(50% + 100px);
@@ -78,6 +77,7 @@
       position: fixed;
       bottom: 100px;
       left: 50%;
+      /* ÚNICA LINHA ALTERADA */
       transform: translateX(calc(-50% - 8px));
       z-index: 999;
     }
@@ -219,11 +219,6 @@
 
     // --- Lógica do botão Play/Pause ---
     playPauseButton.addEventListener('click', () => {
-      // NOVO: Pede permissão na primeira interação do usuário
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission();
-      }
-
       if (video.paused) {
         if (imageEntity.getAttribute('visible')) {
           imageEntity.setAttribute('visible', 'false');
@@ -244,18 +239,6 @@
       playPauseButton.classList.add('rotating');
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
-    
-    // NOVO: Função para mostrar a notificação
-    function showLocalNotification() {
-      // Verifica se o navegador suporta notificações e se a permissão foi concedida
-      if ('Notification' in window && Notification.permission === 'granted') {
-        const options = {
-          body: 'The experience is complete! Click the green button below.',
-          icon: 'videos/hannah.png' // Ícone da notificação
-        };
-        new Notification('Hologram Coin', options);
-      }
-    }
 
     // --- Lógica para quando o vídeo termina ---
     video.addEventListener('ended', function() {
@@ -267,10 +250,12 @@
       playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
       playPauseButton.classList.remove('is-playing');
       playPauseButton.classList.add('is-paused');
-
-      // NOVO: Chama a função para exibir a notificação
-      showLocalNotification();
     });
+
+  </script>
+</body>
+</html>
+
 
   </script>
 </body>
