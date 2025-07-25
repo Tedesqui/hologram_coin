@@ -6,7 +6,7 @@ self.addEventListener('message', event => {
     if (event.data && event.data.type === 'schedule-notification') {
 
         // Define o tempo de espera (1 minuto = 60000 milissegundos)
-        const delay = 60000;
+        const delay = 10000;
 
         setTimeout(() => {
             // Exibe a notificação após o tempo de espera
