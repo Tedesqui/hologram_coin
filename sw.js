@@ -1,42 +1,38 @@
-// sw.js
+// service-worker.js
 
-self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', () => self.clients.claim());
-
-self.addEventListener('message', event => {
-  if (event.data === 'scheduleNotification') {
-    setTimeout(() => {
-      self.registration.showNotification('𝐇𝐎𝐋𝐎𝐆𝐑𝐀𝐌 𝐂𝐎𝐈𝐍', {
-        body: '𝗟𝗶𝗳𝗲 𝗶𝘀 𝗺𝗼𝗿𝗲 𝗳𝘂𝗻 𝘄𝗶𝘁𝗵 𝗖𝗥𝗬𝗣𝗧𝗢. 𝗬𝗼𝘂 𝗮𝗿𝗲 𝗮𝗹𝘄𝗮𝘆𝘀 𝘄𝗲𝗹𝗰𝗼𝗺𝗲!!!',
-        icon: 'videos/hannah.png', // ícone pequeno
-        image: 'videos/hannah.png', // ícone grande (visível em alguns navegadores)
-        badge: 'videos/hannah.png', // ícone da notificação
-        data: {
-          url: 'https://tedesqui.github.io/hologram_coin/' // URL que será aberta
-        }
-      });
-    }, 10000); // 10 segundos
-  }
+// Evento de instalação do Service Worker
+self.addEventListener('install', event => {
+  console.log('Service Worker instalado.');
+  // Força o novo Service Worker a se tornar ativo imediatamente
+  self.skipWaiting();
 });
 
-// Quando o usuário clica na notificação
-self.addEventListener('notificationclick', event => {
-  event.notification.close();
+// Evento de ativação do Service Worker
+self.addEventListener('activate', event => {
+  console.log('Service Worker ativado.');
+  // Garante que o Service Worker tome controle da página imediatamente
+  event.waitUntil(self.clients.claim());
+});
 
-  const urlToOpen = event.notification.data.url;
+// Evento que escuta mensagens vindas da página principal
+self.addEventListener('message', event => {
+  // Verifica se a ação é a que esperamos ('schedule-notification')
+  if (event.data && event.data.action === 'schedule-notification') {
+    console.log('Service Worker recebeu a mensagem para agendar notificação.');
 
-  event.waitUntil(
-    clients.matchAll({ type: 'window' }).then(clientList => {
-      // Se já estiver aberto, foca
-      for (const client of clientList) {
-        if (client.url === urlToOpen && 'focus' in client) {
-          return client.focus();
-        }
-      }
-      // Senão, abre nova aba
-      if (clients.openWindow) {
-        return clients.openWindow(urlToOpen);
-      }
-    })
-  );
+    // Agenda a notificação para aparecer após 10 segundos
+    const notificationDelay = 10000; // 10 segundos em milissegundos
+
+    setTimeout(() => {
+      // Exibe a notificação
+      self.registration.showNotification('💎 Hologram Coin 💎', {
+        body: 'You have a pending message. Come back to see!',
+        icon: 'assets/hannah.png', // Caminho para o ícone da notificação
+        badge: 'assets/hannah.png', // Ícone para a barra de status (Android)
+        vibrate: [200, 100, 200], // Padrão de vibração
+        tag: 'hologram-notification-tag' // Agrupa notificações para não spamar o usuário
+      });
+      console.log('Notificação exibida!');
+    }, notificationDelay);
+  }
 });
