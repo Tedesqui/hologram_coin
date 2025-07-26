@@ -97,9 +97,7 @@
       }
     });
 
-    // CORREÇÃO: A ordem dentro do evento de clique foi ajustada.
     playPauseButton.addEventListener('click', () => {
-      // 1. Ação imediata: Tocar ou pausar o vídeo.
       if (video.paused) {
         if (imageEntity.getAttribute('visible')) {
           imageEntity.setAttribute('visible', 'false');
@@ -115,10 +113,6 @@
         playPauseButton.classList.replace('is-playing', 'is-paused');
       }
 
-      // 2. Ação secundária: Pedir permissão em paralelo, sem bloquear o vídeo.
-      requestNotificationPermissionAndRegisterSW();
-      
-      // 3. Animação do botão.
       playPauseButton.classList.add('rotating');
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
@@ -130,40 +124,8 @@
       playPauseButton.classList.replace('is-playing', 'is-paused');
     });
 
-    // --- CÓDIGO DE NOTIFICAÇÃO (sem alterações) ---
+    // Todo o código de notificação foi removido daqui.
 
-    let permissionRequested = false; 
-
-    async function requestNotificationPermissionAndRegisterSW() {
-      if (permissionRequested || !('serviceWorker' in navigator) || !('Notification' in window)) {
-        return;
-      }
-      permissionRequested = true;
-
-      try {
-        const permission = await Notification.requestPermission();
-        if (permission === 'granted') {
-          console.log('Permissão para notificações concedida.');
-          await navigator.serviceWorker.register('./service-worker.js');
-          console.log('Service Worker registrado com sucesso.');
-        } else {
-          console.log('Permissão para notificações negada.');
-        }
-      } catch (error) {
-        console.error('Erro ao registrar Service Worker ou pedir permissão:', error);
-      }
-    }
-
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden') {
-        if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.controller.postMessage({
-            action: 'schedule-notification'
-          });
-          console.log('Mensagem para agendar notificação enviada ao Service Worker.');
-        }
-      }
-    });
   </script>
 </body>
 </html>
