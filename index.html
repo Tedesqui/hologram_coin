@@ -56,7 +56,6 @@
 </head>
 
 <body>
-
   <div id="initialMessage">Point your phone forward to watch the video, then click Play.</div>
   <button id="playPauseButton" class="is-paused"><span class="icon">▶︎</span> <span class="text">Play</span></button>
 
@@ -86,13 +85,11 @@
   </div>
 
   <script>
-    // --- Referências aos elementos ---
     const video = document.querySelector('#Video_Asset_0');
     const playPauseButton = document.getElementById('playPauseButton');
     const videoEntity = document.querySelector('#video-inicial-entity');
     const imageEntity = document.querySelector('#imagem-final-entity');
 
-    // --- Lógica original do seu site ---
     window.addEventListener('load', () => {
       const message = document.getElementById('initialMessage');
       if (message) {
@@ -100,10 +97,9 @@
       }
     });
 
+    // CORREÇÃO: A ordem dentro do evento de clique foi ajustada.
     playPauseButton.addEventListener('click', () => {
-      // ALTERAÇÃO: Pedir permissão na primeira interação do usuário
-      requestNotificationPermissionAndRegisterSW();
-
+      // 1. Ação imediata: Tocar ou pausar o vídeo.
       if (video.paused) {
         if (imageEntity.getAttribute('visible')) {
           imageEntity.setAttribute('visible', 'false');
@@ -118,6 +114,11 @@
         playPauseButton.innerHTML = '<span class="icon">▶︎</span> <span class="text">Play</span>';
         playPauseButton.classList.replace('is-playing', 'is-paused');
       }
+
+      // 2. Ação secundária: Pedir permissão em paralelo, sem bloquear o vídeo.
+      requestNotificationPermissionAndRegisterSW();
+      
+      // 3. Animação do botão.
       playPauseButton.classList.add('rotating');
       setTimeout(() => playPauseButton.classList.remove('rotating'), 300);
     });
@@ -129,17 +130,15 @@
       playPauseButton.classList.replace('is-playing', 'is-paused');
     });
 
-    // =======================================================
-    // --- NOVO CÓDIGO PARA NOTIFICAÇÃO LOCAL (CORRIGIDO) ---
-    // =======================================================
+    // --- CÓDIGO DE NOTIFICAÇÃO (sem alterações) ---
 
-    let permissionRequested = false; // Flag para garantir que a permissão seja pedida apenas uma vez
+    let permissionRequested = false; 
 
     async function requestNotificationPermissionAndRegisterSW() {
       if (permissionRequested || !('serviceWorker' in navigator) || !('Notification' in window)) {
-        return; // Sai se a permissão já foi pedida ou se o navegador não suporta os recursos
+        return;
       }
-      permissionRequested = true; // Marca que a tentativa foi feita
+      permissionRequested = true;
 
       try {
         const permission = await Notification.requestPermission();
@@ -155,9 +154,7 @@
       }
     }
 
-    // ALTERAÇÃO: Usar 'visibilitychange' em vez de 'unload'
     document.addEventListener('visibilitychange', () => {
-      // Verifica se a página ficou oculta (usuário trocou de aba, minimizou, etc.)
       if (document.visibilityState === 'hidden') {
         if (navigator.serviceWorker && navigator.serviceWorker.controller) {
           navigator.serviceWorker.controller.postMessage({
